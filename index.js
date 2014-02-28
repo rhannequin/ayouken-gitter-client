@@ -21,39 +21,61 @@ function Ayouken(win, doc, $) {
 
 
   function talk(text) {
-    var render = function(message) {
-      $textarea.val(message)
-      $textarea.trigger($.Event('keydown', { keyCode: 13 }))
-    }
-
     if(text.slice(0, 8) === '@ayouken') {
-      var command = text.slice(9)
-      if(commands.hasOwnProperty(command)) {
-        commands[command](render)
-      } else {
-        commands.unknown(render)
-      }
+      var command = text.slice(9).trim()
+      commands.execute(command, function(message) {
+        $textarea.val(message)
+        $textarea.trigger($.Event('keydown', { keyCode: 13 }))
+      })
     }
   }
 
   function Commands() {
     var c = {}
       , api = new Api()
+      , matchers = initMatchers()
 
-    c.roulette = function(cb) {
+    c.execute = function(command, cb) {
+      matchers.every(function(matcher) {
+        if(matcher.matcher(command)) {
+          matcher.command(command, cb)
+          return false
+        }
+        return true
+      })
+    }
+
+    function initMatchers() {
+      return [
+          {command: roulette, matcher: function(test) { return test === 'roulette'}}
+        , {command: gif, matcher: function(test) { return test === 'gif'}}
+        , {command: greet, matcher: function(test) { return new RegExp(/greet/).test(test) }}
+        , {command: help, matcher: function(test) { return test === 'help'}}
+      ]
+    }
+
+    function roulette(command, cb) {
       api.req('/roulette', 'GET', {}, function(res) {
         cb(res.data)
       })
     }
 
-    c.gif = function(cb) {
+    function gif(command, cb) {
       api.req('/gif', 'GET', {}, function(res) {
         var data = res.data
         cb(data.title + ': ' + data.link)
       })
     }
 
-    c.help = function(cb) {
+    function greet(command, cb) {
+      var user = command.match(/greet (.*)/)[1]
+      api.req('/greet/' + user, 'GET', {}, function(res) {
+        var data = res.data
+        cb(res.data)
+      })
+    }
+
+    function help(command, cb) {
       api.req('/help', 'GET', {}, function(res) {
         var list = res.data
           , commands = []
@@ -67,7 +89,7 @@ function Ayouken(win, doc, $) {
       })
     }
 
-    c.unknown = function(cb) {}
+    function unknown(command, cb) {}
 
     return c
   }

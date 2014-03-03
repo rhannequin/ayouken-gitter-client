@@ -49,8 +49,9 @@ function Ayouken(win, doc, $) {
       return [
           {command: roulette, matcher: function(test) { return test === 'roulette'}}
         , {command: gif, matcher: function(test) { return test === 'gif'}}
-        , {command: greet, matcher: function(test) { return new RegExp(/greet/).test(test) }}
         , {command: help, matcher: function(test) { return test === 'help'}}
+        , {command: greet, matcher: function(test) { return new RegExp(/greet/).test(test) }}
+        , {command: hashtag, matcher: function(test) { return new RegExp(/#/).test(test) }}
       ]
     }
 
@@ -70,6 +71,14 @@ function Ayouken(win, doc, $) {
     function greet(command, cb) {
       var user = command.match(/greet (.*)/)[1]
       api.req('/greet/' + user, 'GET', {}, function(res) {
+        var data = res.data
+        cb(res.data)
+      })
+    }
+
+    function hashtag(command, cb) {
+      var hashtag = command.match(/#(.\S*)/)[1]
+      api.req('/hashtag/' + hashtag, 'GET', {}, function(res) {
         var data = res.data
         cb(res.data)
       })

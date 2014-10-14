@@ -3,7 +3,7 @@ function Ayouken(win, doc, $) {
   'use strict';
 
   var ayouken = {}
-    , selector = ".trpChatText:contains('@ayouken')"
+    , selector = ".js-chat-item-text:contains('@ayouken')"
     , counter = $(selector).length
     , $textarea = $('#chat-input-textarea')
     , commands = new Commands()
@@ -24,8 +24,9 @@ function Ayouken(win, doc, $) {
     if(text.slice(0, 8) === '@ayouken') {
       var command = text.slice(9).trim()
       commands.execute(command, function(message) {
-        $textarea.val(message)
-        $textarea.trigger($.Event('keydown', { keyCode: 13 }))
+        $.ajax({url: 'https://gitter.im/api/v1/rooms/xxx/chatMessages', method: 'post', data: {"text": message,"fromUser":{"id":"xxx","usename":"ayouken","displayName":"ayouken","fallbackDisplayName":"ayouken","url":"/ayouken","avatarUrlSmall":"https://avatars.githubusercontent.com/u/xxx?v=2&s=60","avatarUrlMedium":"https://avatars.githubusercontent.com/u/xxx?v=2&s=128","scopes":{"public_repo":true,"private_repo":true},"v":3},"sent":"xxx","burstStart":true}})
+        // $textarea.val(message)
+        // $textarea.trigger($.Event('keydown', { keyCode: 13 }))
       })
     }
   }

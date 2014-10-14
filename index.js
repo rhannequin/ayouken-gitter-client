@@ -3,10 +3,35 @@ function Ayouken(win, doc, $) {
   'use strict';
 
   var ayouken = {}
-    , selector = ".js-chat-item-text:contains('@ayouken')"
+    , botName = 'ayouken'
+    , botMention = '@' + botName
+    , selector = ".js-chat-item-text:contains('" + botMention + "')"
     , counter = $(selector).length
     , $textarea = $('#chat-input-textarea')
     , commands = new Commands()
+
+    , gitterApiParams = {
+          url: 'https://gitter.im/api/v1/rooms/***/chatMessages'
+        , method: 'post'
+        , data: {
+            sent: '2014-10-14T22:42:06.360+02:00'
+          , burstStart: false
+          , fromUser: {
+                id: "***"
+              , username: botName
+              , displayName: botName
+              , fallbackDisplayName: botName
+              , url: '/' + botName
+              , avatarUrlSmall: 'https://avatars.githubusercontent.com/u/***?v=2&s=60'
+              , avatarUrlMedium: 'https://avatars.githubusercontent.com/u/***?v=2&s=128'
+              , v: 3
+              , scopes: {
+                    public_repo: true
+                  , private_repo: true
+              }
+            }
+          }
+        }
 
   ayouken.launch = function() {
     var s = $(selector)
@@ -21,10 +46,15 @@ function Ayouken(win, doc, $) {
 
 
   function talk(text) {
-    if(text.slice(0, 8) === '@ayouken') {
+    if(text.slice(0, 8) === botMention) {
       var command = text.slice(9).trim()
       commands.execute(command, function(message) {
-        $.ajax({url: 'https://gitter.im/api/v1/rooms/xxx/chatMessages', method: 'post', data: {"text": message,"fromUser":{"id":"xxx","usename":"ayouken","displayName":"ayouken","fallbackDisplayName":"ayouken","url":"/ayouken","avatarUrlSmall":"https://avatars.githubusercontent.com/u/xxx?v=2&s=60","avatarUrlMedium":"https://avatars.githubusercontent.com/u/xxx?v=2&s=128","scopes":{"public_repo":true,"private_repo":true},"v":3},"sent":"xxx","burstStart":true}})
+        gitterApiParams.data.text = message
+        $.ajax({
+            url: gitterApiParams.url
+          , method: gitterApiParams.method
+          , data: gitterApiParams.data
+        })
         // $textarea.val(message)
         // $textarea.trigger($.Event('keydown', { keyCode: 13 }))
       })
@@ -48,13 +78,13 @@ function Ayouken(win, doc, $) {
 
     function initMatchers() {
       return [
-          {command: roulette, matcher: function(test) { return test === 'roulette'}}
-        , {command: gif, matcher: function(test) { return test === 'gif'}}
-        , {command: help, matcher: function(test) { return test === 'help'}}
-        , {command: greet, matcher: function(test) { return new RegExp(/greet/).test(test) }}
-        , {command: mdn, matcher: function(test) { return new RegExp(/mdn/).test(test) }}
-        , {command: google, matcher: function(test) { return new RegExp(/google/).test(test) }}
-        , {command: hashtag, matcher: function(test) { return new RegExp(/#/).test(test) }}
+          { command: roulette, matcher: function(test) { return test === 'roulette' } }
+        , { command: gif, matcher: function(test) { return test === 'gif' } }
+        , { command: help, matcher: function(test) { return test === 'help'}}
+        , { command: greet, matcher: function(test) { return new RegExp(/greet/).test(test) } }
+        , { command: mdn, matcher: function(test) { return new RegExp(/mdn/).test(test) } }
+        , { command: google, matcher: function(test) { return new RegExp(/google/).test(test) } }
+        , { command: hashtag, matcher: function(test) { return new RegExp(/#/).test(test) } }
       ]
     }
 
@@ -124,7 +154,7 @@ function Ayouken(win, doc, $) {
 
   function Api() {
     var api = {}
-      , url = 'https://localhost:7001'
+      , url = 'https://localhost:3000'
 
     api.req = function(endpoint, type, data, success, error) {
       endpoint = endpoint || '/'

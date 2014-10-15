@@ -1,0 +1,28 @@
+{
+  "name": "ayouken-gitter-client",
+  "version": "0.0.1",
+  "description": "Gitter client for Ayouken bot",
+  "main": "Gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rhannequin/ayouken-gitter-client.git"
+  },
+  "keywords": [
+    "javascript",
+    "bot",
+    "ayouken"
+  ],
+  "author": "rhannequin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rhannequin/ayouken-gitter-client/issues"
+  },
+  "homepage": "https://github.com/rhannequin/ayouken-gitter-client",
+  "dependencies": {
+    "gulp": "^3.8.8",
+    "gulp-replace": "^0.4.0"
+  }
+}

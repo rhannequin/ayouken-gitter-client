@@ -2,36 +2,16 @@ function Ayouken(win, doc, $) {
 
   'use strict';
 
+
   var ayouken = {}
-    , botName = 'ayouken'
+    , botName = '{botName}'
     , botMention = '@' + botName
     , selector = ".js-chat-item-text:contains('" + botMention + "')"
     , counter = $(selector).length
     , $textarea = $('#chat-input-textarea')
     , commands = new Commands()
 
-    , gitterApiParams = {
-          url: 'https://gitter.im/api/v1/rooms/***/chatMessages'
-        , method: 'post'
-        , data: {
-            sent: '2014-10-14T22:42:06.360+02:00'
-          , burstStart: false
-          , fromUser: {
-                id: "***"
-              , username: botName
-              , displayName: botName
-              , fallbackDisplayName: botName
-              , url: '/' + botName
-              , avatarUrlSmall: 'https://avatars.githubusercontent.com/u/***?v=2&s=60'
-              , avatarUrlMedium: 'https://avatars.githubusercontent.com/u/***?v=2&s=128'
-              , v: 3
-              , scopes: {
-                    public_repo: true
-                  , private_repo: true
-              }
-            }
-          }
-        }
+    , gitterApiParams = {gitterApiParams}
 
   ayouken.launch = function() {
     var s = $(selector)

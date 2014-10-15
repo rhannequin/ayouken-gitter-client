@@ -2,5 +2,7 @@
   "botName": "ayouken",
   "room": "aaabbbccc123456789",
   "gitterUserId": "aaabbbccc123456789",
-  "githubUserId": "123456"
+  "githubUserId": "123456",
+  "apiUrl": "http://api.yourdomain.com",
+  "apiPort": "80"
 }

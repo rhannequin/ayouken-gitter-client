@@ -8,6 +8,8 @@ gulp.task('build', function() {
   return gulp.src(['./src/ayouken.js'])
     .pipe(replace('{botName}', config.botName))
     .pipe(replace('{gitterApiParams}', params))
+    .pipe(replace('{apiUrl}', config.apiUrl))
+    .pipe(replace('{apiPort}', config.apiPort))
     .pipe(gulp.dest('dist/'))
 })
 

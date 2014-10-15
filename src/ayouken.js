@@ -2,7 +2,6 @@ function Ayouken(win, doc, $) {
 
   'use strict';
 
-
   var ayouken = {}
     , botName = '{botName}'
     , botMention = '@' + botName
@@ -30,6 +29,7 @@ function Ayouken(win, doc, $) {
       var command = text.slice(9).trim()
       commands.execute(command, function(message) {
         gitterApiParams.data.text = message
+        gitterApiParams.data.sent = new Date().toISOString()
         $.ajax({
             url: gitterApiParams.url
           , method: gitterApiParams.method
@@ -134,7 +134,7 @@ function Ayouken(win, doc, $) {
 
   function Api() {
     var api = {}
-      , url = 'https://localhost:3000'
+      , url = '{apiUrl}:{apiPort}'
 
     api.req = function(endpoint, type, data, success, error) {
       endpoint = endpoint || '/'
